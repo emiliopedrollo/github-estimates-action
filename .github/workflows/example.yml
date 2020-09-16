@@ -12,9 +12,6 @@ jobs:
     name: Update project column estimates
     steps:
       - uses: actions/checkout@v1
-        
-      - name: Update dependencies
-        run: npm update
 
       - name: Use API to calculate and update total estimates in each column
         id: run
