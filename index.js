@@ -29,7 +29,7 @@ try {
                             }).then(({data: issue}) => {
                                 let estimate = 0
                                 if (issue) {
-                                    estimate = issue.body.match(/estimate:\s*(\d+)/)[1] || 0
+                                    estimate = parseInt(issue.body.match(/estimate:\s*(\d+)/)[1]) || 0
                                 }
                                 return estimate
                             }).catch((e) => core.setFailed(e.message))
