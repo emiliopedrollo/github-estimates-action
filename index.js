@@ -28,6 +28,7 @@ try {
                                 issue_number: /[^/]*$/.exec(card.content_url)[0]
                             }).then((issue) => {
                                 let estimate = 0
+                                console.log(issue)
                                 if (issue) {
                                     estimate = issue.body.match(/estimate:\s*(\d+)/)[1] || 0
                                 }
