@@ -8,7 +8,7 @@ try {
     const repo = core.getInput('repo')
 
     const payload = JSON.stringify(github.context.payload, undefined, 2)
-    console.log(`The event payload: ${payload}`)
+    //console.log(`The event payload: ${payload}`)
 
 
     const octokit = new Octokit({
@@ -22,19 +22,30 @@ try {
                 columns.map((column) => {
                     octokit.paginate(column.cards_url).then((cards) => (
                         Promise.all(cards.map((card) => (
-                            octokit.issues.listLabelsOnIssue({
+                            octokit.issues.get({
                                 owner,
                                 repo,
                                 issue_number: /[^/]*$/.exec(card.content_url)[0]
-                            }).then(({ data: labels }) => {
-                                let total = 0
-
-                                labels.filter((l) => l.description = 'Story Point').map((l) => {
-                                    total = total + parseInt(l.name)
-                                })
-
-                                return total
+                            }).then((issue) => {
+                                let estimate = 0
+                                if (issue) {
+                                    estimate = issue.body.match(/estimate:\s*(\d+)/)[1] || 0
+                                }
+                                return estimate
                             }).catch((e) => core.setFailed(e.message))
+                            // octokit.issues.listLabelsOnIssue({
+                            //     owner,
+                            //     repo,
+                            //     issue_number: /[^/]*$/.exec(card.content_url)[0]
+                            // }).then(({ data: labels }) => {
+                            //     let total = 0
+                            //
+                            //     labels.filter((l) => l.description = 'Story Point').map((l) => {
+                            //         total = total + parseInt(l.name)
+                            //     })
+                            //
+                            //     return total
+                            // }).catch((e) => core.setFailed(e.message))
                         ))).then((estimates) => {
 
                             let name = ''
