@@ -20,6 +20,6 @@ jobs:
         id: run
         uses: ./
         with:
-          owner: 'mathiasjakobsen'
+          owner: 'emiliopedrollo'
           repo: 'github-estimates-action'
           token: ${{ secrets.GITHUB_TOKEN }}
